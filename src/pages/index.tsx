@@ -1,9 +1,12 @@
 import { GetStaticProps } from 'next';
+
 import Prismic from '@prismicio/client';
 import { RichText } from 'prismic-dom';
 
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+
+import { FiUser, FiCalendar } from 'react-icons/fi';
 
 import { getPrismicClient } from '../services/prismic';
 
@@ -30,7 +33,38 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps): JSX.Element {
-  return <h1>oi</h1>;
+  return (
+    <main>
+      <a>
+        <h1>Como utilizar Hooks</h1>
+        <p>Pensando em sincronização em vez de ciclos de vida.</p>
+        <footer>
+          <span>
+            <FiCalendar />
+            <p>15 Mar 2021</p>
+          </span>
+          <span>
+            <FiUser />
+            <p>Joseph Oliveira</p>
+          </span>
+        </footer>
+      </a>
+      <a>
+        <h1>Como utilizar Hooks</h1>
+        <p>Pensando em sincronização em vez de ciclos de vida.</p>
+        <footer>
+          <span>
+            <FiCalendar />
+            <p>15 Mar 2021</p>
+          </span>
+          <span>
+            <FiUser />
+            <p>Joseph Oliveira</p>
+          </span>
+        </footer>
+      </a>
+    </main>
+  );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
