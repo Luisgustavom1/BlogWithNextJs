@@ -60,11 +60,11 @@ export default function Post({ post }: PostProps): JSX.Element {
         </section>
         <div className={styles.body}>
           {post.data.content.map((content, id) => (
-            <article key={id}>
+            <article key={id} className={styles.content}>
               <h2>{content.heading}</h2>
-              <div>
-                <p>{content.body}</p>
-              </div>
+              <p
+                dangerouslySetInnerHTML={{ __html: content.body.toString() }}
+              />
             </article>
           ))}
         </div>
@@ -114,10 +114,12 @@ export const getStaticProps: GetStaticProps = async context => {
       author: response.data.author,
       content: response.data.content.map(content => ({
         heading: content.heading,
-        body: RichText.asText(content.body),
+        body: RichText.asHtml(content.body),
       })),
     },
   };
+
+  console.log(JSON.stringify(response, null, 2));
 
   return {
     props: {
