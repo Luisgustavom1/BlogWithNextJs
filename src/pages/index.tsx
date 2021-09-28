@@ -1,7 +1,6 @@
 import { GetStaticProps } from 'next';
 
 import Prismic from '@prismicio/client';
-import { RichText } from 'prismic-dom';
 
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -12,6 +11,7 @@ import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
+import Header from '../components/Header';
 
 interface Post {
   uid?: string;
@@ -34,36 +34,44 @@ interface HomeProps {
 
 export default function Home({ postsPagination }: HomeProps): JSX.Element {
   return (
-    <main>
-      <a>
-        <h1>Como utilizar Hooks</h1>
-        <p>Pensando em sincronização em vez de ciclos de vida.</p>
-        <footer>
-          <span>
-            <FiCalendar />
-            <p>15 Mar 2021</p>
-          </span>
-          <span>
-            <FiUser />
-            <p>Joseph Oliveira</p>
-          </span>
-        </footer>
-      </a>
-      <a>
-        <h1>Como utilizar Hooks</h1>
-        <p>Pensando em sincronização em vez de ciclos de vida.</p>
-        <footer>
-          <span>
-            <FiCalendar />
-            <p>15 Mar 2021</p>
-          </span>
-          <span>
-            <FiUser />
-            <p>Joseph Oliveira</p>
-          </span>
-        </footer>
-      </a>
-    </main>
+    <>
+      <Header className="home" />
+      <main className={commonStyles.main}>
+        <a className={styles.post}>
+          <h1 className={styles.title}>Como utilizar Hooks</h1>
+          <p className={styles.subtitle}>
+            Pensando em sincronização em vez de ciclos de vida.
+          </p>
+          <footer className={commonStyles.authorAndDate}>
+            <span>
+              <FiCalendar />
+              <p>15 Mar 2021</p>
+            </span>
+            <span>
+              <FiUser />
+              <p>Joseph Oliveira</p>
+            </span>
+          </footer>
+        </a>
+        <a className={styles.post}>
+          <h1 className={styles.title}>Como utilizar Hooks</h1>
+          <p className={styles.subtitle}>
+            Pensando em sincronização em vez de ciclos de vida.
+          </p>
+          <footer className={commonStyles.authorAndDate}>
+            <span>
+              <FiCalendar />
+              <p>15 Mar 2021</p>
+            </span>
+            <span>
+              <FiUser />
+              <p>Joseph Oliveira</p>
+            </span>
+          </footer>
+        </a>
+        <p className={styles.maisPosts}>Carregar mais posts</p>
+      </main>
+    </>
   );
 }
 

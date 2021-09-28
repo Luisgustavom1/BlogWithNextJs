@@ -1,0 +1,45 @@
+.post {
+  display: block;
+
+  cursor: pointer;
+
+  &:hover {
+    opacity: .8;
+  }
+}
+
+.post + a {
+  margin-top: 4.8rem;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: 700;
+
+  color: var(--heading);
+
+  margin-bottom: .8rem;
+
+  user-select: none;
+}
+
+.subtitle {
+  font-size: 1.8rem;
+  color: var(--body);
+}
+
+.maisPosts {
+  font-size: 1.8rem;
+  font-weight: 600;
+
+  color: var(--highlight);
+
+  margin-top: 6.4rem;
+
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    opacity: .8;
+  }
+}

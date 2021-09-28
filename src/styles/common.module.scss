@@ -1,1 +1,24 @@
-// TODO
+.main {
+  max-width: 700px;
+
+  margin: 0 auto;
+}
+
+.authorAndDate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 26.3rem;
+
+  color: var(--info);
+
+  margin-top: 2.4rem;
+  span {
+    display: flex;
+    align-items: center;
+
+    gap: 1.05rem;
+    font-size: 1.4rem;
+  }
+}
