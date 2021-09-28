@@ -1,10 +1,10 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { GetStaticProps } from 'next';
-
+import { useState } from 'react';
 import Prismic from '@prismicio/client';
-
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
-
 import { FiUser, FiCalendar } from 'react-icons/fi';
 
 import { getPrismicClient } from '../services/prismic';
@@ -33,43 +33,61 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps): JSX.Element {
+  const [showMorePosts, setShowMorePosts] = useState(false);
+  const [morePosts, setMorePosts] = useState<Post[]>([]);
+
+  function getMorePosts(): void {
+    fetch(postsPagination.next_page)
+      .then(res => res.json())
+      .then(data => setMorePosts(data));
+  }
+
+  function handleClick(): void {
+    getMorePosts();
+    setShowMorePosts(true);
+  }
+
   return (
     <>
       <Header className="home" />
       <main className={commonStyles.main}>
-        <a className={styles.post}>
-          <h1 className={styles.title}>Como utilizar Hooks</h1>
-          <p className={styles.subtitle}>
-            Pensando em sincronização em vez de ciclos de vida.
+        {postsPagination.results.map(post => (
+          <a className={styles.post} key={post.uid}>
+            <h1 className={styles.title}>{post.data.title}</h1>
+            <p className={styles.subtitle}>{post.data.subtitle}</p>
+            <footer className={commonStyles.authorAndDate}>
+              <span>
+                <FiCalendar />
+                <p>{post.first_publication_date}</p>
+              </span>
+              <span>
+                <FiUser />
+                <p>{post.data.author}</p>
+              </span>
+            </footer>
+          </a>
+        ))}
+        {postsPagination.next_page && !showMorePosts && (
+          <p className={styles.maisPosts} onClick={() => handleClick()}>
+            Carregar mais posts
           </p>
-          <footer className={commonStyles.authorAndDate}>
-            <span>
-              <FiCalendar />
-              <p>15 Mar 2021</p>
-            </span>
-            <span>
-              <FiUser />
-              <p>Joseph Oliveira</p>
-            </span>
-          </footer>
-        </a>
-        <a className={styles.post}>
-          <h1 className={styles.title}>Como utilizar Hooks</h1>
-          <p className={styles.subtitle}>
-            Pensando em sincronização em vez de ciclos de vida.
-          </p>
-          <footer className={commonStyles.authorAndDate}>
-            <span>
-              <FiCalendar />
-              <p>15 Mar 2021</p>
-            </span>
-            <span>
-              <FiUser />
-              <p>Joseph Oliveira</p>
-            </span>
-          </footer>
-        </a>
-        <p className={styles.maisPosts}>Carregar mais posts</p>
+        )}
+        {morePosts.map(post => (
+          <a className={styles.post} key={post.uid}>
+            <h1 className={styles.title}>{post.data.title}</h1>
+            <p className={styles.subtitle}>{post.data.subtitle}</p>
+            <footer className={commonStyles.description}>
+              <span>
+                <FiCalendar />
+                <p>{post.first_publication_date}</p>
+              </span>
+              <span>
+                <FiUser />
+                <p>{post.data.author}</p>
+              </span>
+            </footer>
+          </a>
+        ))}
       </main>
     </>
   );

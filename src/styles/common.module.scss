@@ -4,12 +4,11 @@
   margin: 0 auto;
 }
 
-.authorAndDate {
+.description {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 
-  width: 26.3rem;
+  gap: 2.6rem;
 
   color: var(--info);
 
@@ -18,7 +17,7 @@
     display: flex;
     align-items: center;
 
-    gap: 1.05rem;
+    gap: .6rem;
     font-size: 1.4rem;
   }
 }
