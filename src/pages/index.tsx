@@ -40,21 +40,16 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps): JSX.Element {
-  const [showMorePosts, setShowMorePosts] = useState(false);
+  const [nextPage, setNextPage] = useState(postsPagination.next_page);
   const [posts, setPosts] = useState<Post[]>(postsPagination.results);
 
   function getMorePosts(): void {
-    fetch(postsPagination.next_page)
+    fetch(nextPage)
       .then(res => res.json())
       .then(data => {
         console.log(data.results);
         setPosts([...posts, ...data.results]);
       });
-  }
-
-  function handleClick(): void {
-    getMorePosts();
-    setShowMorePosts(true);
   }
 
   return (
@@ -84,8 +79,8 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
             </a>
           </Link>
         ))}
-        {!showMorePosts && (
-          <p className={styles.morePosts} onClick={handleClick}>
+        {nextPage && (
+          <p className={styles.morePosts} onClick={() => getMorePosts()}>
             Carregar mais posts
           </p>
         )}
