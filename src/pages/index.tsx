@@ -1,19 +1,24 @@
+/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+import Link from 'next/link';
 import { GetStaticProps } from 'next';
-import { useState } from 'react';
-import Prismic from '@prismicio/client';
-import { format } from 'date-fns';
+import Head from 'next/head';
+
+import { useEffect, useState } from 'react';
+
 import ptBR from 'date-fns/locale/pt-BR';
+import { format } from 'date-fns';
+
 import { FiUser, FiCalendar } from 'react-icons/fi';
 
-import Link from 'next/link';
-
+import Prismic from '@prismicio/client';
 import { getPrismicClient } from '../services/prismic';
+
+import Header from '../components/Header';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
-import Header from '../components/Header';
 
 interface Post {
   uid?: string;
@@ -36,12 +41,15 @@ interface HomeProps {
 
 export default function Home({ postsPagination }: HomeProps): JSX.Element {
   const [showMorePosts, setShowMorePosts] = useState(false);
-  const [morePosts, setMorePosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<Post[]>(postsPagination.results);
 
   function getMorePosts(): void {
     fetch(postsPagination.next_page)
       .then(res => res.json())
-      .then(data => setMorePosts(data));
+      .then(data => {
+        console.log(data.results);
+        setPosts([...posts, ...data.results]);
+      });
   }
 
   function handleClick(): void {
@@ -51,9 +59,14 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
 
   return (
     <>
+      <Head>
+        <title>Home | Spacetraveling</title>
+      </Head>
+
       <Header className="home" />
+
       <main className={commonStyles.main}>
-        {postsPagination.results.map(post => (
+        {posts?.map(post => (
           <Link href={`/post/${post.uid}`}>
             <a className={styles.post} key={post.uid}>
               <h1 className={styles.title}>{post.data.title}</h1>
@@ -71,27 +84,11 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
             </a>
           </Link>
         ))}
-        {postsPagination.next_page && !showMorePosts && (
-          <p className={styles.maisPosts} onClick={() => handleClick()}>
+        {!showMorePosts && (
+          <p className={styles.morePosts} onClick={handleClick}>
             Carregar mais posts
           </p>
         )}
-        {morePosts.map(post => (
-          <a className={styles.post} key={post.uid}>
-            <h1 className={styles.title}>{post.data.title}</h1>
-            <p className={styles.subtitle}>{post.data.subtitle}</p>
-            <footer className={commonStyles.description}>
-              <span>
-                <FiCalendar />
-                <p>{post.first_publication_date}</p>
-              </span>
-              <span>
-                <FiUser />
-                <p>{post.data.author}</p>
-              </span>
-            </footer>
-          </a>
-        ))}
       </main>
     </>
   );

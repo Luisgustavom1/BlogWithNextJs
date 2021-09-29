@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styles from './header.module.scss';
 
 interface HeaderProps {
@@ -7,7 +8,11 @@ interface HeaderProps {
 export default function Header({ className }: HeaderProps): JSX.Element {
   return (
     <header className={`${styles.container} ${styles[className]}`}>
-      <img src="/assets/svg/Logo.svg" alt="Img Logo" />
+      <Link href="/">
+        <a>
+          <img src="/assets/svg/Logo.svg" alt="logo" />
+        </a>
+      </Link>
     </header>
   );
 }
