@@ -47,8 +47,18 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
     fetch(nextPage)
       .then(res => res.json())
       .then(data => {
-        console.log(data.results);
-        setPosts([...posts, ...data.results]);
+        const newPosts = data.results.map(post => ({
+          uid: post.uid,
+          first_publication_date: post.first_publication_date,
+          data: {
+            title: post.data.title,
+            subtitle: post.data.subtitle,
+            author: post.data.author,
+          },
+        }));
+
+        setPosts([...posts, ...newPosts]);
+        setNextPage(data.next_page);
       });
   }
 
@@ -62,14 +72,18 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
 
       <main className={commonStyles.main}>
         {posts?.map(post => (
-          <Link href={`/post/${post.uid}`}>
-            <a className={styles.post} key={post.uid}>
+          <Link href={`/post/${post.uid}`} key={post.uid}>
+            <a className={styles.post}>
               <h1 className={styles.title}>{post.data.title}</h1>
               <p className={styles.subtitle}>{post.data.subtitle}</p>
               <footer className={commonStyles.description}>
                 <span>
                   <FiCalendar />
-                  <p>{post.first_publication_date}</p>
+                  <p>
+                    {format(new Date(post.first_publication_date), 'd MMM y', {
+                      locale: ptBR,
+                    })}
+                  </p>
                 </span>
                 <span>
                   <FiUser />
@@ -102,13 +116,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const posts = postsResponse.results.map(post => {
     return {
       uid: post.uid,
-      first_publication_date: format(
-        new Date(post.first_publication_date),
-        'd MMM y',
-        {
-          locale: ptBR,
-        }
-      ),
+      first_publication_date: post.first_publication_date,
       data: {
         title: post.data.title,
         subtitle: post.data.subtitle,
